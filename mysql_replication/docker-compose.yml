@@ -1,0 +1,26 @@
+services:
+  mysql_master:
+    build: 
+      context: ./master
+      dockerfile: dockerfile_master
+    container_name: mysql_master
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - mysql_net
+
+  mysql_slave:
+    build:
+      context: ./slave  
+      dockerfile: dockerfile_slave
+    container_name: mysql_slave
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      - mysql_master
+    networks:
+      - mysql_net
+
+networks:
+  mysql_net:
+    driver: bridge
