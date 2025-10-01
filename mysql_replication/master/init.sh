@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 until mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" -e "SELECT 1"; do
   sleep 2
 done
