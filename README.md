@@ -40,25 +40,25 @@ Master-Master даёт отказоустойчивость и распреде�
 
 ## Проверка master!
 
-# Проверка пользователя репликации
+### Проверка пользователя репликации
 ```
 docker exec mysql_master mysql -uroot -p"НАШ_PASS" -e "SELECT user, host, plugin FROM mysql.user WHERE user='repl';"
 ```
-# Проверка тестовой базы
+### Проверка тестовой базы
 ```
 docker exec mysql_master mysql -uroot -p"НАШ_PASS" -e "SHOW DATABASES; USE test_db; SHOW TABLES; SELECT * FROM example;"
 ```
-# Получение статуса Master
+### Получение статуса Master
 ```
 docker exec mysql_master mysql -uroot -p"НАШ_PASS" -e "SHOW MASTER STATUS\G"
 ```
 
-## Настройка slave!
+### Настройка slave!
 
-# Проверка готовности Slave
+### Проверка готовности Slave
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SELECT 'Slave ready' as status;"
 
-# Настройка репликации (подставить актуальные File и Position)
+### Настройка репликации (подставить актуальные File и Position)
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "
 CHANGE REPLICATION SOURCE TO
 SOURCE_HOST='mysql_master',
@@ -68,30 +68,30 @@ SOURCE_LOG_FILE='mysql-bin.000003',
 SOURCE_LOG_POS=157;
 START REPLICA;"
 
-# Проверка реплики
+### Проверка реплики
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SHOW REPLICA STATUS\G" | grep Running
 
 ![Cкриншот Задание 2](img/image.png)
 
-# Ошибочкии
+### Ошибочкии
 
 ```
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SHOW REPLICA STATUS\G" | grep -E "(Last_IO_Error|Last_SQL_Error|Error)"
 ```
 ![Cкриншот Задание 2](img/image1.png)
 
-# Проверка базы на slave
+### Проверка базы на slave
 ```
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SHOW DATABASES;"
 ```
 ![Cкриншот Задание 2](img/image2.png)
 
-# Добавление тестовых данных на master
+### Добавление тестовых данных на master
 ```
 docker exec mysql_master mysql -uroot -p"НАШ_PASS" -e "USE test_db; INSERT INTO example (data) VALUES ('Test replication');"
 ```
 
-# Проверка данных на Slave
+### Проверка данных на Slave
 ```
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "USE test_db; SELECT * FROM example;"
 ```
