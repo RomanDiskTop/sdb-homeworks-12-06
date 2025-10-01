@@ -53,12 +53,17 @@ docker exec mysql_master mysql -uroot -p"НАШ_PASS" -e "SHOW DATABASES; USE te
 docker exec mysql_master mysql -uroot -p"НАШ_PASS" -e "SHOW MASTER STATUS\G"
 ```
 
-### Настройка slave!
+## Настройка slave!
 
 ### Проверка готовности Slave
-docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SELECT 'Slave ready' as status;"
 
-### Настройка репликации (подставить актуальные File и Position)
+```
+docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SELECT 'Slave ready' as status;"
+```
+
+### Настройка репликации
+
+```
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "
 CHANGE REPLICATION SOURCE TO
 SOURCE_HOST='mysql_master',
@@ -67,9 +72,13 @@ SOURCE_PASSWORD='НАШ_PASS',
 SOURCE_LOG_FILE='mysql-bin.000003',
 SOURCE_LOG_POS=157;
 START REPLICA;"
+```
 
 ### Проверка реплики
+
+```
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SHOW REPLICA STATUS\G" | grep Running
+```
 
 ![Cкриншот Задание 2](img/image.png)
 
@@ -81,17 +90,20 @@ docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SHOW REPLICA STATUS\G" 
 ![Cкриншот Задание 2](img/image1.png)
 
 ### Проверка базы на slave
+
 ```
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "SHOW DATABASES;"
 ```
 ![Cкриншот Задание 2](img/image2.png)
 
 ### Добавление тестовых данных на master
+
 ```
 docker exec mysql_master mysql -uroot -p"НАШ_PASS" -e "USE test_db; INSERT INTO example (data) VALUES ('Test replication');"
 ```
 
 ### Проверка данных на Slave
+
 ```
 docker exec mysql_slave mysql -uroot -p"НАШ_PASS" -e "USE test_db; SELECT * FROM example;"
 ```
