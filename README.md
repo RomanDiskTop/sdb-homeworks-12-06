@@ -36,7 +36,7 @@ Master-Master даёт отказоустойчивость и распреде�
 
 ## Ответ на задание 2
 
-[Структура](/hsrp_advanced.pkt)
+[Структура](https://github.com/RomanDiskTop/sdb-homeworks-12-06/tree/main/mysql_replication)
 
 ## Проверка master!
 
